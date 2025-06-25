@@ -1,6 +1,6 @@
 {
   "name": "@grec0/mcp-planka",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "MCP server for Planka board",
   "license": "MIT",
   "author": "@grec0",
@@ -14,7 +14,8 @@
     "dist"
   ],
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "scripts": {
     "build": "tsc && shx chmod +x dist/*.js",
