@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "planka-kanban": {
+      "command": "npx",
+      "args": ["@grec0/mcp-planka@latest"],
+      "env": {
+        "PLANKA_BASE_URL": "http://localhost:3000",
+        "PLANKA_AGENT_EMAIL": "admin@example.com",
+        "PLANKA_AGENT_PASSWORD": "your_password_here",
+        "MCP_SERVER_TYPE": "stdio"
+      }
+    }
+  }
+} 
