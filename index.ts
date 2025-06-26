@@ -786,13 +786,12 @@ server.tool(
   }
 );
 
-async function createServer() {
-  // Create a new server instance with proper metadata
+async function validateEnvironment() {
+  // Validate environment variables
   console.error("Creating Planka MCP Server...");
   console.error("Server info: planka-mcp-server");
   console.error("Version:", VERSION);
   
-  // Validate environment variables
   if (!process.env.PLANKA_BASE_URL) {
     console.error("Warning: PLANKA_BASE_URL environment variable not set");
   } else {
@@ -810,8 +809,6 @@ async function createServer() {
   } else {
     console.error("PLANKA_AGENT_PASSWORD:", "***");
   }
-  
-  return server;
 }
 
 async function startStdioServer() {
@@ -922,8 +919,8 @@ async function startHttpServer(port = 3000) {
 
 async function runServer() {
   try {
-    // Create the server
-    await createServer();
+    // Validate environment
+    await validateEnvironment();
     
     // Determine server type based on environment variables
     const serverType = process.env.MCP_SERVER_TYPE || 'stdio';
