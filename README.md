@@ -88,13 +88,13 @@ npm run build
 
 #### Para Claude Desktop (config.json)
 
-**Configuración básica con NPX:**
+**Configuración básica con NPX (RECOMENDADO):**
 ```json
 {
   "mcpServers": {
     "planka": {
       "command": "npx",
-      "args": ["@grec0/mcp-planka"],
+      "args": ["@grec0/mcp-planka@latest"],
       "env": {
         "PLANKA_BASE_URL": "http://localhost:3000",
         "PLANKA_AGENT_EMAIL": "demo@demo.demo",
@@ -105,13 +105,15 @@ npm run build
 }
 ```
 
+> **⚠️ IMPORTANTE**: Usar `@latest` garantiza que se use la versión más reciente del paquete. Sin esto, puedes obtener errores como "no server info found".
+
 **Para servidor Planka remoto:**
 ```json
 {
   "mcpServers": {
     "planka": {
       "command": "npx",
-      "args": ["@grec0/mcp-planka"],
+      "args": ["@grec0/mcp-planka@latest"],
       "env": {
         "PLANKA_BASE_URL": "https://tu-planka-server.com",
         "PLANKA_AGENT_EMAIL": "tu-email@ejemplo.com",
@@ -172,6 +174,46 @@ Después de configurar el MCP, puedes verificar que funciona correctamente:
    ```
    mcp_kanban_project_board_manager(action: "create_board", projectId: "ID_DEL_PROYECTO", name: "Tablero de Prueba", position: 1)
    ```
+
+## 🔧 Solución de Problemas
+
+### Error: "no server info found"
+
+Este error típicamente ocurre por:
+
+1. **Falta el `@latest` en la configuración**:
+   ```json
+   // ❌ INCORRECTO
+   "args": ["@grec0/mcp-planka"]
+   
+   // ✅ CORRECTO  
+   "args": ["@grec0/mcp-planka@latest"]
+   ```
+
+2. **Variables de entorno faltantes o incorrectas**:
+   ```json
+   "env": {
+     "PLANKA_BASE_URL": "http://localhost:3000",
+     "PLANKA_AGENT_EMAIL": "demo@demo.demo", 
+     "PLANKA_AGENT_PASSWORD": "demo"
+   }
+   ```
+
+3. **El servidor Planka no está ejecutándose**:
+   - Verificar que Planka esté en `http://localhost:3000`
+   - Verificar que las credenciales sean correctas
+
+4. **Caché de npm desactualizado**:
+   ```bash
+   npm cache clean --force
+   npx @grec0/mcp-planka@latest
+   ```
+
+### Otros errores comunes
+
+- **Error de conexión**: Verificar que `PLANKA_BASE_URL` sea correcta y accesible
+- **Error de autenticación**: Verificar email y contraseña en las variables de entorno
+- **Timeout**: Verificar conectividad de red con el servidor Planka
 
 ### Variables de Entorno Principales
 
