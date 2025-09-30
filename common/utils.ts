@@ -1,9 +1,27 @@
 import { getUserAgent } from "universal-user-agent";
 import { createPlankaError } from "./errors.js";
 import { VERSION } from "./version.js";
+import https from "https";
+import nodeFetch, { type Response as NodeFetchResponse } from "node-fetch";
 
 // Global variables to store tokens
 let agentToken: string | null = null;
+
+// Create HTTPS agent for insecure connections if needed
+let httpsAgent: https.Agent | undefined;
+if (process.env.PLANKA_ALLOW_INSECURE === "true") {
+  console.error("[DEBUG] Allowing insecure HTTPS connections (certificate validation disabled)");
+  httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+  });
+}
+
+// Custom fetch function that uses the agent
+const customFetch = httpsAgent
+  ? (url: string | URL, options?: RequestInit) => {
+    return nodeFetch(url, { ...options, agent: httpsAgent } as any);
+  }
+  : fetch;
 
 type RequestOptions = {
   method?: string;
@@ -12,7 +30,7 @@ type RequestOptions = {
   skipAuth?: boolean;
 };
 
-async function parseResponseBody(response: Response): Promise<unknown> {
+async function parseResponseBody(response: Response | NodeFetchResponse): Promise<unknown> {
   const contentType = response.headers.get("content-type");
   if (contentType?.includes("application/json")) {
     return response.json();
@@ -49,12 +67,12 @@ async function authenticateAgent(): Promise<string> {
   }
 
   const baseUrl = process.env.PLANKA_BASE_URL || "http://localhost:3000";
-  
+
   // Construir la URL correctamente para el endpoint de tokens
-  const url = baseUrl.endsWith('/') 
+  const url = baseUrl.endsWith('/')
     ? `${baseUrl}api/access-tokens`
     : `${baseUrl}/api/access-tokens`;
-  
+
   console.error(`[DEBUG] Authentication URL: ${url}`);
   console.error(`[DEBUG] Base URL: ${baseUrl}`);
 
@@ -63,10 +81,10 @@ async function authenticateAgent(): Promise<string> {
       emailOrUsername: email,
       password: password,
     });
-    
+
     console.error(`[DEBUG] Request body: ${requestBody}`);
-    
-    const response = await fetch(url, {
+
+    const response = await customFetch(url, {
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -81,7 +99,7 @@ async function authenticateAgent(): Promise<string> {
     console.error(`[DEBUG] Response headers:`, Object.fromEntries(response.headers.entries()));
 
     const responseBody = await parseResponseBody(response);
-    
+
     console.error(`[DEBUG] Response body:`, responseBody);
 
     if (!response.ok) {
@@ -118,9 +136,9 @@ export async function plankaRequest(
 
   // Ensure path starts with /api/ if not already present
   const normalizedPath = path.startsWith("/api/") ? path : `/api/${path}`;
-  
+
   // Construir la URL correctamente
-  const url = baseUrl.endsWith('/') 
+  const url = baseUrl.endsWith('/')
     ? `${baseUrl}${normalizedPath.substring(1)}` // Remove leading slash if baseUrl ends with /
     : `${baseUrl}${normalizedPath}`;
 
@@ -150,14 +168,14 @@ export async function plankaRequest(
   }
 
   try {
-    const response = await fetch(url, {
+    const response = await customFetch(url, {
       method: options.method || "GET",
       headers,
       body: options.body instanceof FormData
         ? options.body
         : options.body
-        ? JSON.stringify(options.body)
-        : undefined,
+          ? JSON.stringify(options.body)
+          : undefined,
       credentials: "include", // Include cookies for Planka authentication
     });
 
@@ -225,8 +243,7 @@ export async function getUserIdByEmail(email: string): Promise<string | null> {
     return user ? user.id : null;
   } catch (error) {
     console.error(
-      `Failed to get user ID by email: ${
-        error instanceof Error ? error.message : String(error)
+      `Failed to get user ID by email: ${error instanceof Error ? error.message : String(error)
       }`,
     );
     return null;
@@ -254,8 +271,7 @@ export async function getUserIdByUsername(
     return user ? user.id : null;
   } catch (error) {
     console.error(
-      `Failed to get user ID by username: ${
-        error instanceof Error ? error.message : String(error)
+      `Failed to get user ID by username: ${error instanceof Error ? error.message : String(error)
       }`,
     );
     return null;

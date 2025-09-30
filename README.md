@@ -76,6 +76,7 @@ npm run build
 | `PLANKA_BASE_URL` | URL base del servidor Planka | `http://localhost:3000` |
 | `PLANKA_AGENT_EMAIL` | Email para autenticación | - |
 | `PLANKA_AGENT_PASSWORD` | Contraseña para autenticación | - |
+| `PLANKA_ALLOW_INSECURE` | Permitir conexiones HTTPS sin validar certificado SSL (útil para certificados autofirmados o internos) | `false` |
 
 ### Configuración MCP en Aplicaciones USANDO NPX (RECOMENDADO)
 
@@ -118,6 +119,24 @@ npm run build
         "PLANKA_BASE_URL": "https://tu-planka-server.com",
         "PLANKA_AGENT_EMAIL": "tu-email@ejemplo.com",
         "PLANKA_AGENT_PASSWORD": "tu-contraseña"
+      }
+    }
+  }
+}
+```
+
+**Para servidor Planka con certificado SSL autofirmado o interno:**
+```json
+{
+  "mcpServers": {
+    "planka": {
+      "command": "npx",
+      "args": ["@grec0/mcp-planka@latest"],
+      "env": {
+        "PLANKA_BASE_URL": "https://planka-interno.empresa.com",
+        "PLANKA_AGENT_EMAIL": "tu-email@ejemplo.com",
+        "PLANKA_AGENT_PASSWORD": "tu-contraseña",
+        "PLANKA_ALLOW_INSECURE": "true"
       }
     }
   }
@@ -209,6 +228,28 @@ Este error típicamente ocurre por:
    npx @grec0/mcp-planka@latest
    ```
 
+### Error de certificado SSL (UNABLE_TO_VERIFY_LEAF_SIGNATURE)
+
+Si obtiene errores relacionados con certificados SSL autofirmados o internos:
+
+```
+Error: unable to verify the first certificate
+Error: UNABLE_TO_VERIFY_LEAF_SIGNATURE
+```
+
+**Solución**: Habilitar conexiones inseguras agregando `PLANKA_ALLOW_INSECURE: "true"` a la configuración:
+
+```json
+"env": {
+  "PLANKA_BASE_URL": "https://planka-interno.empresa.com",
+  "PLANKA_AGENT_EMAIL": "tu-email@ejemplo.com",
+  "PLANKA_AGENT_PASSWORD": "tu-contraseña",
+  "PLANKA_ALLOW_INSECURE": "true"
+}
+```
+
+> **⚠️ ADVERTENCIA DE SEGURIDAD**: Solo usar `PLANKA_ALLOW_INSECURE=true` en entornos internos de confianza. Esta opción desactiva la validación de certificados SSL y no debe usarse para servidores públicos en Internet.
+
 ### Otros errores comunes
 
 - **Error de conexión**: Verificar que `PLANKA_BASE_URL` sea correcta y accesible
@@ -222,6 +263,9 @@ Este error típicamente ocurre por:
 PLANKA_BASE_URL=http://localhost:3000
 PLANKA_AGENT_EMAIL=demo@demo.demo
 PLANKA_AGENT_PASSWORD=demo
+
+# Opcional: Para certificados SSL autofirmados o internos
+PLANKA_ALLOW_INSECURE=true
 ```
 
 ### Configuración de Servidor Planka Local
