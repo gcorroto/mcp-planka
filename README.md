@@ -421,6 +421,13 @@ Verificar:
 npm test
 ```
 
+## Releasing
+
+El patch se incrementa automáticamente en CI con cada push a `main`.
+Para una versión minor, ejecuta `npm run release:minor`.
+Para una versión major, ejecuta `npm run release:major`.
+La publicación en npm se realiza solo desde CI.
+
 ## 📖 Compatibilidad
 
 - **Planka**: v1.0.0+
