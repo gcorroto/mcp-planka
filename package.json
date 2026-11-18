@@ -4,8 +4,12 @@
   "description": "MCP server for Planka board",
   "license": "MIT",
   "author": "@grec0",
-  "homepage": "https://github.com/grec0/mcp-planka",
-  "bugs": "https://github.com/grec0/mcp-planka/issues",
+  "homepage": "https://github.com/gcorroto/mcp-planka",
+  "bugs": "https://github.com/gcorroto/mcp-planka/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gcorroto/mcp-planka.git"
+  },
   "type": "module",
   "bin": {
     "mcp-server-planka": "dist/index.js"
@@ -23,7 +27,7 @@
     "start": "node dist/index.js",
     "dev": "npm run build && npm run start",
     "inspector": "npx -y @modelcontextprotocol/inspector node dist/index.js",
-    "inspector:demo": "SERVER_PORT=3008 CLIENT_PORT=5174 npx -y @modelcontextprotocol/inspector -e PLANKA_BASE_URL=http://localhost:3000 -e PLANKA_ADMIN_ID=1460688047300412417 -e PLANKA_AGENT_EMAIL=claude-sic-score-front-end@cursor.com -e PLANKA_AGENT_PASSWORD=supersupersecre1 node dist/index.js",
+    "inspector:demo": "SERVER_PORT=3008 CLIENT_PORT=5174 npx -y @modelcontextprotocol/inspector -e PLANKA_BASE_URL=http://localhost:3000 -e PLANKA_ADMIN_ID=<admin-id> -e PLANKA_AGENT_EMAIL=<agent-email> -e PLANKA_AGENT_PASSWORD=<agent-password> node dist/index.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testMatch='**/tests/**/*.test.ts'",
     "up": "docker compose --env-file .env up -d",
     "down": "docker compose down",
@@ -32,11 +36,9 @@
     "version:patch": "npm version patch --no-git-tag-version",
     "version:minor": "npm version minor --no-git-tag-version",
     "version:major": "npm version major --no-git-tag-version",
-    "prerelease": "npm run build && npm test",
-    "release:patch": "npm run version:patch && npm run prerelease && npm publish",
-    "release:minor": "npm run version:minor && npm run prerelease && npm publish",
-    "release:major": "npm run version:major && npm run prerelease && npm publish",
-    "postpublish": "git add package.json && git commit -m \"chore: bump version to v$(node -p \"require('./package.json').version\")\" && git push"
+    "check": "npm run build && npm test",
+    "release:minor": "npm run version:minor && git commit -am \"chore(release): v$(node -p \"require('./package.json').version\")\" && git push",
+    "release:major": "npm run version:major && git commit -am \"chore(release): v$(node -p \"require('./package.json').version\")\" && git push"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.6.1",
