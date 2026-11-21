@@ -58,8 +58,6 @@ async function authenticateAgent(): Promise<string> {
   const email = process.env.PLANKA_AGENT_EMAIL;
   const password = process.env.PLANKA_AGENT_PASSWORD;
 
-  console.error(`[DEBUG] Attempting authentication with email: ${email}`);
-
   if (!email || !password) {
     throw new Error(
       "PLANKA_AGENT_EMAIL and PLANKA_AGENT_PASSWORD environment variables are required",
@@ -81,8 +79,6 @@ async function authenticateAgent(): Promise<string> {
       emailOrUsername: email,
       password: password,
     });
-
-    console.error(`[DEBUG] Request body: ${requestBody}`);
 
     const response = await customFetch(url, {
       method: "POST",
