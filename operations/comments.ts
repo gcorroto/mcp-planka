@@ -80,12 +80,12 @@ const CommentActionSchema = z.object({
 // Response schemas
 const CommentActionsResponseSchema = z.object({
     items: z.array(CommentActionSchema),
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 const CommentActionResponseSchema = z.object({
     item: CommentActionSchema,
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 // Function implementations

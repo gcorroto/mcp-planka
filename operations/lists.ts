@@ -64,12 +64,12 @@ export type UpdateListOptions = z.infer<typeof UpdateListSchema>;
 // Response schemas
 const ListsResponseSchema = z.object({
     items: z.array(PlankaListSchema),
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 const ListResponseSchema = z.object({
     item: PlankaListSchema,
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 // Function implementations
