@@ -91,12 +91,12 @@ export type UpdateTaskOptions = z.infer<typeof UpdateTaskSchema>;
 // Response schemas
 const TasksResponseSchema = z.object({
     items: z.array(PlankaTaskSchema),
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 const TaskResponseSchema = z.object({
     item: PlankaTaskSchema,
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 // Map to store task ID to card ID mapping

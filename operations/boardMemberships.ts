@@ -93,12 +93,12 @@ const BoardMembershipSchema = z.object({
 // Response schemas
 const BoardMembershipsResponseSchema = z.object({
     items: z.array(BoardMembershipSchema),
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 const BoardMembershipResponseSchema = z.object({
     item: BoardMembershipSchema,
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 // Function implementations

@@ -431,7 +431,7 @@ La publicación en npm se realiza solo desde CI.
 ## 📖 Compatibilidad
 
 - **Planka**: v1.0.0+
-- **Node.js**: >=18.0.0
+- **Node.js**: >=20.0.0
 - **Sistemas**: Windows, Linux, macOS
 - **MCP**: Compatible con Claude Desktop y otros clientes MCP
 

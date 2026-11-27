@@ -135,12 +135,12 @@ export type RemoveLabelFromCardOptions = z.infer<
 // Response schemas
 const LabelsResponseSchema = z.object({
     items: z.array(PlankaLabelSchema),
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 const LabelResponseSchema = z.object({
     item: PlankaLabelSchema,
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 const CardLabelResponseSchema = z.object({
@@ -151,7 +151,7 @@ const CardLabelResponseSchema = z.object({
         createdAt: z.string(),
         updatedAt: z.string().nullable(),
     }),
-    included: z.record(z.any()).optional(),
+    included: z.record(z.string(), z.any()).optional(),
 });
 
 // Function implementations
